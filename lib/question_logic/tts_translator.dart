@@ -9,6 +9,7 @@ class TTSService {
     await _flutterTts.setSpeechRate(0.5);
     await _flutterTts.setVolume(1.0);
     await _flutterTts.speak(text);
+    print('idgaf');
   }
-
+  
 }
