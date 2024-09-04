@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:oral_app2/screens/home_page/home_page.dart';
+import 'package:oral_app2/screens/home_page.dart';
 import 'package:oral_app2/screens/practice_screen/practice_screen.dart';
 import 'package:oral_app2/screens/result_screen.dart';
 import 'package:oral_app2/question_logic/tts_translator.dart';
@@ -26,10 +26,12 @@ class _MyAppState extends State<MyApp> {
   List<bool> answeredCorrectly = [];
   int totalTimeInSeconds = 0;
   Operation _selectedOperation = Operation.addition;
+  String _selectedRange = 'Upto +5'; // Default range
 
-  void switchToPracticeScreen(Operation operation) {
+  void switchToPracticeScreen(Operation operation, String range) {
     setState(() {
       _selectedOperation = operation;
+      _selectedRange = range;
       activeScreen = 'practice_screen';
     });
   }
@@ -82,6 +84,7 @@ class _MyAppState extends State<MyApp> {
                             switchToResultScreen(questions, correctAnswers, time),
                         (text) => triggerTTS(text, ref),
                         _selectedOperation,
+                        _selectedRange,
                       )
                     : ResultScreen(answeredQuestions, answeredCorrectly, totalTimeInSeconds, switchToStartScreen);
           },

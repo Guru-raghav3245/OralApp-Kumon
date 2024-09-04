@@ -8,8 +8,11 @@ class PracticeScreen extends StatefulWidget {
   final Function(List<String>, List<bool>, int) switchToResultScreen;
   final Function(String) triggerTTS;
   final Operation selectedOperation;
+  final String selectedRange;
 
-  const PracticeScreen(this.switchToResultScreen, this.triggerTTS, this.selectedOperation, {super.key});
+  const PracticeScreen(
+      this.switchToResultScreen, this.triggerTTS, this.selectedOperation, this.selectedRange,
+      {super.key});
 
   @override
   _PracticeScreenState createState() => _PracticeScreenState();
@@ -46,7 +49,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   void regenerateNumbers() {
     setState(() {
-      numbers = QuestionGenerator().generateTwoRandomNumbers(widget.selectedOperation);
+      numbers = QuestionGenerator().generateTwoRandomNumbers(widget.selectedOperation, widget.selectedRange);
     });
   }
 
@@ -56,8 +59,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
     setState(() {
       answeredQuestions.add(
-        '${numbers[0]} ${_getOperatorSymbol(widget.selectedOperation)} ${numbers[1]} = $userAnswer (${isCorrect ? "Correct" : "Wrong, The correct answer is ${numbers[2]}"})'
-      );
+          '${numbers[0]} ${_getOperatorSymbol(widget.selectedOperation)} ${numbers[1]} = $userAnswer (${isCorrect ? "Correct" : "Wrong, The correct answer is ${numbers[2]}"})');
       answeredCorrectly.add(isCorrect);
     });
   }
@@ -93,26 +95,30 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   void endQuiz() {
     stopTimer();
-    widget.switchToResultScreen(answeredQuestions, answeredCorrectly, _secondsPassed);
+    widget.switchToResultScreen(
+        answeredQuestions, answeredCorrectly, _secondsPassed);
   }
 
   void quitQuiz() {
     stopTimer();
-    Navigator.of(context).popUntil((route) => route.isFirst); // Navigate back to the home screen
+    Navigator.of(context)
+        .popUntil((route) => route.isFirst); // Navigate back to the home screen
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    String questionText = '${numbers[0]} ${_getOperatorSymbol(widget.selectedOperation)} ${numbers[1]} = ?';
+    String questionText =
+        '${numbers[0]} ${_getOperatorSymbol(widget.selectedOperation)} ${numbers[1]} = ?';
 
     return Stack(
       children: [
         Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
             child: ElevatedButton(
               onPressed: () {
                 showQuitDialog(context, quitQuiz); // Pass the quit function
@@ -191,7 +197,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 icon: const Icon(Icons.speaker),
                 iconSize: 150,
                 color: Colors.black,
-                onPressed: _triggerTTSSpeech, 
+                onPressed: _triggerTTSSpeech,
               ),
               const SizedBox(height: 20),
               Text(
@@ -217,4 +223,3 @@ class _PracticeScreenState extends State<PracticeScreen> {
     );
   }
 }
-
