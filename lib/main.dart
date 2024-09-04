@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:oral_app2/screens/home_page.dart';
+import 'package:oral_app2/screens/home_page/home_page.dart';
 import 'package:oral_app2/screens/practice_screen/practice_screen.dart';
 import 'package:oral_app2/screens/result_screen.dart';
 import 'package:oral_app2/question_logic/tts_translator.dart';
