@@ -27,12 +27,14 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            title: const Text('Home',
+              style: TextStyle(color: Colors.white),),
             onTap: onHomePressed,
           ),
           ListTile(
             leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
+            title: const Text('Settings',
+              style: TextStyle(color: Colors.white),),
             onTap: onSettingsPressed,
           ),
         ],

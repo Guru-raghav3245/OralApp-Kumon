@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
 
-void showQuitDialog(BuildContext context) {
+void showQuitDialog(BuildContext context, VoidCallback onQuit) {
   showDialog(
     context: context,
-    barrierDismissible: false, // Prevents closing the dialog by tapping outside
+    barrierDismissible: true, // Prevent closing the dialog by tapping outside
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Do you want to quit the quiz?',
-          style: TextStyle(color: Color(0xFF009DDC))),
+        title: const Text(
+          'Do you want to quit the quiz?',
+          style: TextStyle(color: Color(0xFF009DDC)), // Kumon blue
+        ),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
-              Navigator.of(context).popUntil((route) => route.isFirst); // Navigate back to the home screen
+              onQuit(); // Execute the quit function
             },
-            child: const Text('Quit',
-              style: TextStyle(color: Colors.red)),
+            child: const Text(
+              'Quit',
+              style: TextStyle(color: Colors.red),
+            ),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: const Text('Cancel',
-              style: TextStyle(color: Colors.green)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.green),
+            ),
           ),
         ],
       );

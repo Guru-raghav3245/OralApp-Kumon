@@ -18,13 +18,12 @@ class _StartScreenState extends State<StartScreen> {
   void _navigateToSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SettingsScreen()), // Navigate to the settings screen
+      MaterialPageRoute(builder: (context) => SettingsScreen()), // Navigate to the settings screen
     );
   }
 
   void _navigateToHome() {
     Navigator.pop(context);
-    Navigator.pop(context); 
   }
 
   @override
@@ -58,14 +57,6 @@ class _StartScreenState extends State<StartScreen> {
               '/Users/Hacer/Desktop/flutter_projects/oral_app2/assets/kumon_logo.png', // Updated to relative path
               height: 50,
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Kumon Oral Practice',
-              style: theme.textTheme.headlineMedium?.copyWith(
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 20),
             const SizedBox(height: 90),
             Image.asset(
               '/Users/Hacer/Desktop/flutter_projects/oral_app2/assets/speaker_logo.png', // Updated to relative path

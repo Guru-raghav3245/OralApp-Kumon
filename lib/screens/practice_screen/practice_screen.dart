@@ -96,6 +96,11 @@ class _PracticeScreenState extends State<PracticeScreen> {
     widget.switchToResultScreen(answeredQuestions, answeredCorrectly, _secondsPassed);
   }
 
+  void quitQuiz() {
+    stopTimer();
+    Navigator.of(context).popUntil((route) => route.isFirst); // Navigate back to the home screen
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -110,7 +115,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
             child: ElevatedButton(
               onPressed: () {
-                showQuitDialog(context); // Call the dialog function
+                showQuitDialog(context, quitQuiz); // Pass the quit function
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -212,3 +217,4 @@ class _PracticeScreenState extends State<PracticeScreen> {
     );
   }
 }
+

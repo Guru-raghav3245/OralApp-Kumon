@@ -5,12 +5,15 @@ import 'package:oral_app2/screens/practice_screen/practice_screen.dart';
 import 'package:oral_app2/screens/result_screen.dart';
 import 'package:oral_app2/question_logic/tts_translator.dart';
 import 'package:oral_app2/question_logic/question_generator.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 
 void main() {
-  runApp(MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _MyAppState();
@@ -20,9 +23,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String activeScreen = 'start_screen';
   List<String> answeredQuestions = [];
-  List<bool> answeredCorrectly = []; // New List to store whether the answers are correct or not
+  List<bool> answeredCorrectly = [];
   int totalTimeInSeconds = 0;
-  Operation _selectedOperation = Operation.addition; // Default operation
+  Operation _selectedOperation = Operation.addition;
 
   void switchToPracticeScreen(Operation operation) {
     setState(() {
@@ -40,14 +43,14 @@ class _MyAppState extends State<MyApp> {
   void switchToResultScreen(List<String> questions, List<bool> correctAnswers, int time) {
     setState(() {
       answeredQuestions = questions;
-      answeredCorrectly = correctAnswers; // Store whether each answer is correct
+      answeredCorrectly = correctAnswers;
       totalTimeInSeconds = time;
       activeScreen = 'result_screen';
     });
   }
 
-  void triggerTTS(String text) {
-    TTSService().speak(text);
+  void triggerTTS(String text, WidgetRef ref) {
+    TTSService().speak(text, ref); // Pass WidgetRef to TTSService
   }
 
   @override
@@ -69,17 +72,21 @@ class _MyAppState extends State<MyApp> {
       theme: theme,
       home: Scaffold(
         backgroundColor: theme.colorScheme.surface,
-        body: activeScreen == 'start_screen'
-            ? StartScreen(switchToPracticeScreen)
-            : activeScreen == 'practice_screen'
-                ? PracticeScreen(
-                    (questions, correctAnswers, time) => switchToResultScreen(questions, correctAnswers, time),
-                    (text) => triggerTTS(text),
-                    _selectedOperation
-                  )
-                : ResultScreen(answeredQuestions, answeredCorrectly, totalTimeInSeconds, switchToStartScreen),
+        body: Consumer(
+          builder: (context, ref, child) {
+            return activeScreen == 'start_screen'
+                ? StartScreen(switchToPracticeScreen)
+                : activeScreen == 'practice_screen'
+                    ? PracticeScreen(
+                        (questions, correctAnswers, time) =>
+                            switchToResultScreen(questions, correctAnswers, time),
+                        (text) => triggerTTS(text, ref),
+                        _selectedOperation,
+                      )
+                    : ResultScreen(answeredQuestions, answeredCorrectly, totalTimeInSeconds, switchToStartScreen);
+          },
+        ),
       ),
     );
   }
 }
-
