@@ -35,4 +35,3 @@ void showQuitDialog(BuildContext context, VoidCallback onQuit) {
     },
   );
 }
-

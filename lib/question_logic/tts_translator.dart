@@ -21,3 +21,7 @@ class TTSService {
     await _flutterTts.speak(text);
   }
 }
+
+final ttsServiceProvider = Provider<TTSService>((ref) {
+  return TTSService(); // Replace with your TTS service initialization
+});
