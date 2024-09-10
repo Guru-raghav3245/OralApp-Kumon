@@ -42,7 +42,8 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void switchToResultScreen(List<String> questions, List<bool> correctAnswers, int time) {
+  void switchToResultScreen(
+      List<String> questions, List<bool> correctAnswers, int time) {
     setState(() {
       answeredQuestions = questions;
       answeredCorrectly = correctAnswers;
@@ -81,13 +82,15 @@ class _MyAppState extends State<MyApp> {
                 : activeScreen == 'practice_screen'
                     ? PracticeScreen(
                         (questions, correctAnswers, time) =>
-                            switchToResultScreen(questions, correctAnswers, time),
+                            switchToResultScreen(
+                                questions, correctAnswers, time),
+                        switchToStartScreen, // Pass directly as VoidCallback
                         (text) => triggerTTS(text, ref),
-                        switchToStartScreen,
                         _selectedOperation,
                         _selectedRange,
                       )
-                    : ResultScreen(answeredQuestions, answeredCorrectly, totalTimeInSeconds, switchToStartScreen);
+                    : ResultScreen(answeredQuestions, answeredCorrectly,
+                        totalTimeInSeconds, switchToStartScreen);
           },
         ),
       ),

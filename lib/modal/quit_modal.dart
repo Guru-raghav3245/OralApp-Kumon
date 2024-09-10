@@ -15,7 +15,8 @@ class QuitDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () {
-            Navigator.pop(context); // Pop the current route off the navigation stack
+            Navigator.pop(context); // Close the dialog
+            onQuit(); // Trigger the quit function to switch to start screen
           },
           child: const Text(
             'Quit',
@@ -24,7 +25,7 @@ class QuitDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.pop(context); // Pop the current route off the navigation stack
+            Navigator.pop(context); // Close the dialog without quitting
           },
           child: const Text(
             'Cancel',

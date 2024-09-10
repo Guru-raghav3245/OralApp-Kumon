@@ -1,13 +1,14 @@
-// ignore_for_file: must_be_immutable
+// PracticeScreen.dart
 
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:oral_app2/question_logic/question_generator.dart';
 import 'package:oral_app2/question_logic/question_checker.dart';
+import 'package:oral_app2/modal/quit_modal.dart'; // Import the QuitDialog
 
 class PracticeScreen extends StatefulWidget {
   final Function(List<String>, List<bool>, int) switchToResultScreen;
-  void switchToStartScreen;
+  final VoidCallback switchToStartScreen;
   final Function(String) triggerTTS;
   final Operation selectedOperation;
   final String selectedRange;
@@ -105,6 +106,19 @@ class _PracticeScreenState extends State<PracticeScreen> {
         answeredQuestions, answeredCorrectly, _secondsPassed);
   }
 
+  void _showQuitDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return QuitDialog(
+          onQuit: () {
+            widget.switchToStartScreen(); // Call the function to switch to start screen
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -120,9 +134,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
             padding:
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
             child: ElevatedButton(
-              onPressed: () {
-                widget.switchToStartScreen;
-              },
+              onPressed: _showQuitDialog, // Show the quit dialog
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.black,
