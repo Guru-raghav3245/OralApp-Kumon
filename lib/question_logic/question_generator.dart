@@ -56,4 +56,9 @@ class QuestionGenerator {
 
     return [num1, num2, correctAnswer];
   }
+
+  int generateRandomNumber() {
+    final random = Random();
+    return random.nextInt(100) + 1; // Generate random number between 1 and 100
+  }
 }

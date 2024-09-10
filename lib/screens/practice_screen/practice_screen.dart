@@ -1,10 +1,7 @@
-// PracticeScreen.dart
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:oral_app2/question_logic/question_generator.dart';
-import 'package:oral_app2/question_logic/question_checker.dart';
-import 'package:oral_app2/modal/quit_modal.dart'; // Import the QuitDialog
+import 'package:oral_app2/screens/practice_screen/quit_modal/quit_modal.dart'; // Import the QuitDialog
 
 class PracticeScreen extends StatefulWidget {
   final Function(List<String>, List<bool>, int) switchToResultScreen;
@@ -13,12 +10,8 @@ class PracticeScreen extends StatefulWidget {
   final Operation selectedOperation;
   final String selectedRange;
 
-  PracticeScreen(
-      this.switchToResultScreen, 
-      this.switchToStartScreen,
-      this.triggerTTS, 
-      this.selectedOperation, 
-      this.selectedRange,
+  PracticeScreen(this.switchToResultScreen, this.switchToStartScreen,
+      this.triggerTTS, this.selectedOperation, this.selectedRange,
       {super.key});
 
   @override
@@ -27,7 +20,8 @@ class PracticeScreen extends StatefulWidget {
 
 class _PracticeScreenState extends State<PracticeScreen> {
   List<int> numbers = [0, 0, 0];
-  final _textController = TextEditingController();
+  List<int> answerOptions = [];
+  int correctAnswer = 0;
   String resultText = '';
   List<String> answeredQuestions = [];
   List<bool> answeredCorrectly = [];
@@ -56,17 +50,26 @@ class _PracticeScreenState extends State<PracticeScreen> {
 
   void regenerateNumbers() {
     setState(() {
-      numbers = QuestionGenerator().generateTwoRandomNumbers(widget.selectedOperation, widget.selectedRange);
+      numbers = QuestionGenerator().generateTwoRandomNumbers(
+          widget.selectedOperation, widget.selectedRange);
+      correctAnswer = numbers[2];
+      answerOptions = [correctAnswer];
+      while (answerOptions.length < 3) {
+        int option = QuestionGenerator().generateRandomNumber();
+        if (!answerOptions.contains(option)) {
+          answerOptions.add(option);
+        }
+      }
+      answerOptions.shuffle(); // Randomize answer options
     });
   }
 
-  void checkAnswer() {
-    int userAnswer = int.parse(_textController.text);
-    bool isCorrect = QuestionChecker.checkAnswer(userAnswer, numbers[2]) == "Correct";
+  void checkAnswer(int selectedAnswer) {
+    bool isCorrect = selectedAnswer == correctAnswer;
 
     setState(() {
       answeredQuestions.add(
-          '${numbers[0]} ${_getOperatorSymbol(widget.selectedOperation)} ${numbers[1]} = $userAnswer (${isCorrect ? "Correct" : "Wrong, The correct answer is ${numbers[2]}"})');
+          '${numbers[0]} ${_getOperatorSymbol(widget.selectedOperation)} ${numbers[1]} = $selectedAnswer (${isCorrect ? "Correct" : "Wrong, The correct answer is $correctAnswer"})');
       answeredCorrectly.add(isCorrect);
     });
   }
@@ -112,7 +115,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
       builder: (BuildContext context) {
         return QuitDialog(
           onQuit: () {
-            widget.switchToStartScreen(); // Call the function to switch to start screen
+            widget
+                .switchToStartScreen(); // Call the function to switch to start screen
           },
         );
       },
@@ -126,112 +130,146 @@ class _PracticeScreenState extends State<PracticeScreen> {
     String questionText =
         '${numbers[0]} ${_getOperatorSymbol(widget.selectedOperation)} ${numbers[1]} = ?';
 
-    return Stack(
-      children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
-            child: ElevatedButton(
-              onPressed: _showQuitDialog, // Show the quit dialog
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.black,
-                shape: const CircleBorder(),
-                minimumSize: const Size(60, 60),
-              ),
-              child: const Icon(
-                Icons.exit_to_app_rounded,
-                color: Colors.white,
-                size: 24,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Practice Quiz'),
+        backgroundColor: const Color(0xFF009DDC), // Kumon blue
+        actions: [
+          ElevatedButton(
+            onPressed: () {}, // Show the quit dialog
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.black,
+              shape: const CircleBorder(),
+              // minimumSize: const Size(40, 40),
+            ),
+            child: const Icon(
+              Icons.pause,
+              size: 20,
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: 150,
-              height: 35,
-              child: ElevatedButton(
-                onPressed: endQuiz,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 10, 127, 22),
-                ),
-                child: const Text(
-                  'Show Result',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+          ElevatedButton(
+            onPressed: _showQuitDialog, // Show the quit dialog
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              shape: const CircleBorder(),
+              // minimumSize: const Size(40, 40),
+            ),
+            child: const Icon(
+              Icons.exit_to_app_rounded,
+              size: 20,
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              width: 150,
-              height: 35,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.restart_alt_rounded),
-                onPressed: () {
-                  checkAnswer();
-                  regenerateNumbers();
-                  _textController.clear();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.onSurface,
-                ),
-                label: const Text(
-                  'Next Question',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
-                ),
-              ),
+          ElevatedButton(
+            onPressed: endQuiz,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 10, 127, 22),
+              // minimumSize: const Size(120, 40),
             ),
-          ),
-        ),
-        Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.speaker),
-                iconSize: 150,
+            child: const Text(
+              'Show Result',
+              style: TextStyle(
                 color: Colors.black,
-                onPressed: _triggerTTSSpeech,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 20),
-              Text(
-                questionText,
-                style: theme.textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextField(
-                  controller: _textController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: 'What\'s your answer?',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
+      body: Stack(
+        children: [
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.speaker),
+                  iconSize: 150,
+                  color: Colors.black,
+                  onPressed: _triggerTTSSpeech,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  questionText,
+                  style: theme.textTheme.headlineMedium,
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              checkAnswer(answerOptions[0]);
+                              regenerateNumbers();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
+                              backgroundColor: theme.colorScheme.primary,
+                            ),
+                            child: Text(
+                              answerOptions[0].toString(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        SizedBox(
+                          width: 150,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              checkAnswer(answerOptions[1]);
+                              regenerateNumbers();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const StadiumBorder(),
+                              backgroundColor: theme.colorScheme.primary,
+                            ),
+                            child: Text(
+                              answerOptions[1].toString(),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 150,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          checkAnswer(answerOptions[2]);
+                          regenerateNumbers();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: const StadiumBorder(),
+                          backgroundColor: theme.colorScheme.primary,
+                        ),
+                        child: Text(
+                          answerOptions[2].toString(),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
