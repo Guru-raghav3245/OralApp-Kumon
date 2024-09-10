@@ -6,8 +6,9 @@ import 'dropdown_widgets.dart'; // Import the dropdown widgets
 
 class StartScreen extends StatefulWidget {
   final Function(Operation, String) switchToPracticeScreen;
+  final Function() switchToStartScreen;
 
-  const StartScreen(this.switchToPracticeScreen, {super.key});
+  const StartScreen(this.switchToPracticeScreen, this.switchToStartScreen,{super.key});
 
   @override
   _StartScreenState createState() => _StartScreenState();

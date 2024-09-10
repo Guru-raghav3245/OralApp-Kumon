@@ -77,12 +77,13 @@ class _MyAppState extends State<MyApp> {
         body: Consumer(
           builder: (context, ref, child) {
             return activeScreen == 'start_screen'
-                ? StartScreen(switchToPracticeScreen)
+                ? StartScreen(switchToPracticeScreen, switchToStartScreen)
                 : activeScreen == 'practice_screen'
                     ? PracticeScreen(
                         (questions, correctAnswers, time) =>
                             switchToResultScreen(questions, correctAnswers, time),
                         (text) => triggerTTS(text, ref),
+                        switchToStartScreen,
                         _selectedOperation,
                         _selectedRange,
                       )

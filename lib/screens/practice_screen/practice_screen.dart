@@ -1,17 +1,23 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:oral_app2/question_logic/question_generator.dart';
 import 'package:oral_app2/question_logic/question_checker.dart';
-import 'package:oral_app2/modal/quit_modal.dart'; // Import the quit_modal.dart
 
 class PracticeScreen extends StatefulWidget {
   final Function(List<String>, List<bool>, int) switchToResultScreen;
+  void switchToStartScreen;
   final Function(String) triggerTTS;
   final Operation selectedOperation;
   final String selectedRange;
 
-  const PracticeScreen(
-      this.switchToResultScreen, this.triggerTTS, this.selectedOperation, this.selectedRange,
+  PracticeScreen(
+      this.switchToResultScreen, 
+      this.switchToStartScreen,
+      this.triggerTTS, 
+      this.selectedOperation, 
+      this.selectedRange,
       {super.key});
 
   @override
@@ -99,12 +105,6 @@ class _PracticeScreenState extends State<PracticeScreen> {
         answeredQuestions, answeredCorrectly, _secondsPassed);
   }
 
-  void quitQuiz() {
-    stopTimer();
-    Navigator.of(context)
-        .popUntil((route) => route.isFirst); // Navigate back to the home screen
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -121,7 +121,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
             child: ElevatedButton(
               onPressed: () {
-                showQuitDialog(context, quitQuiz); // Pass the quit function
+                widget.switchToStartScreen;
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
