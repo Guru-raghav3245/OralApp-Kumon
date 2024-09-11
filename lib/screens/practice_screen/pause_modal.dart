@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 
 class PauseDialog extends StatelessWidget {
+  final VoidCallback onResume; // Callback for resuming the timer
 
-  const PauseDialog({super.key});
+  const PauseDialog({super.key, required this.onResume});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text(
-        'Do you want to quit the quiz?',
-        style: TextStyle(color: Color(0xFF009DDC)), // Kumon blue
+      backgroundColor: Colors.black,
+      title: const Center(
+        child: Text(
+          'Quiz is Paused',
+          style: TextStyle(color: Color(0xFF009DDC)), // Kumon blue
+        ),
       ),
       actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context); // Close the dialog
-
-          },
-          child: const Text(
-            'Quit',
-            style: TextStyle(color: Colors.red),
+        Center(
+          child: TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the dialog
+              onResume(); // Call the resume callback
+            },
+            child: const Text(
+              'Resume Quiz',
+              style: TextStyle(color: Colors.green),
+            ),
           ),
         ),
       ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oral_app2/question_logic/question_generator.dart';
 import 'package:oral_app2/screens/home_screen/drawer/drawer.dart'; // Import the custom drawer
 import 'package:oral_app2/screens/home_screen/drawer/settings_screen.dart'; // Import the settings screen
-import 'dropdown_widgets.dart'; // Import the dropdown widgets
+import 'package:oral_app2/screens/home_screen/dropdown_widgets.dart'; // Import the dropdown widgets
 
 class StartScreen extends StatefulWidget {
   final Function(Operation, String) switchToPracticeScreen;
