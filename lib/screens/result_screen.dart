@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ResultScreen extends StatelessWidget {
   final List<String> answeredQuestions;
-  final List<bool> answeredCorrectly; // Added this list to track correctness
+  final List<bool> answeredCorrectly;
   final int totalTime;
   final Function switchToStartScreen;
 
@@ -13,6 +13,9 @@ class ResultScreen extends StatelessWidget {
     final theme = Theme.of(context);
     int minutes = totalTime ~/ 60;
     int seconds = totalTime % 60;
+
+    // Calculate the number of correct answers
+    int correctAnswers = answeredCorrectly.where((correct) => correct).length;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -41,6 +44,16 @@ class ResultScreen extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               'Questions Attended: ${answeredQuestions.length}',
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            // Display the number of correct answers
+            Text(
+              'Correct Answers: $correctAnswers',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w600,

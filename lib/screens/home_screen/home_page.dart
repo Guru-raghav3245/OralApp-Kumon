@@ -8,7 +8,8 @@ class StartScreen extends StatefulWidget {
   final Function(Operation, String) switchToPracticeScreen;
   final Function() switchToStartScreen;
 
-  const StartScreen(this.switchToPracticeScreen, this.switchToStartScreen,{super.key});
+  const StartScreen(this.switchToPracticeScreen, this.switchToStartScreen,
+      {super.key});
 
   @override
   _StartScreenState createState() => _StartScreenState();
@@ -37,7 +38,8 @@ class _StartScreenState extends State<StartScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kumon Oral Practice', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Kumon Oral Practice',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: theme.colorScheme.primary,
         actions: [
           IconButton(
@@ -62,17 +64,11 @@ class _StartScreenState extends State<StartScreen> {
               height: 80,
             ),
             const SizedBox(height: 60),
-            const Icon(
-              Icons.volume_up, 
-              size: 200,
-              color: Colors.black),
+            const Icon(Icons.volume_up, size: 200, color: Colors.black),
             const SizedBox(height: 60),
             const Text(
               "Choose an Operation and Start Practicing",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20
-              ),
+              style: TextStyle(color: Colors.black, fontSize: 20),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -82,7 +78,8 @@ class _StartScreenState extends State<StartScreen> {
                 if (newValue != null) {
                   setState(() {
                     _selectedOperation = newValue;
-                    _selectedRange = _getDefaultRange(newValue); // Update the range when operation changes
+                    _selectedRange = _getDefaultRange(
+                        newValue); // Update the range when operation changes
                   });
                 }
               },
@@ -102,12 +99,17 @@ class _StartScreenState extends State<StartScreen> {
             const SizedBox(height: 40),
             ElevatedButton.icon(
               iconAlignment: IconAlignment.end,
-              icon: const Icon(Icons.arrow_forward, color: Colors.black,),
+              icon: const Icon(
+                Icons.arrow_forward,
+                color: Colors.black,
+              ),
               onPressed: () {
-                widget.switchToPracticeScreen(_selectedOperation, _selectedRange);
+                widget.switchToPracticeScreen(
+                    _selectedOperation, _selectedRange);
               },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 backgroundColor: theme.colorScheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -115,7 +117,8 @@ class _StartScreenState extends State<StartScreen> {
               ),
               label: Text(
                 'Start Oral Practice',
-                style: theme.textTheme.titleMedium?.copyWith(color: Colors.black, fontSize: 16),
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(color: Colors.black, fontSize: 16),
               ),
             ),
           ],

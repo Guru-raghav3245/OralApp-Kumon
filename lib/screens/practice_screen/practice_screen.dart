@@ -11,7 +11,7 @@ class PracticeScreen extends StatefulWidget {
   final Operation selectedOperation;
   final String selectedRange;
 
-  PracticeScreen(this.switchToResultScreen, this.switchToStartScreen,
+  const PracticeScreen(this.switchToResultScreen, this.switchToStartScreen,
       this.triggerTTS, this.selectedOperation, this.selectedRange,
       {super.key});
 
@@ -125,7 +125,8 @@ class _PracticeScreenState extends State<PracticeScreen> {
       builder: (BuildContext context) {
         return QuitDialog(
           onQuit: () {
-            widget.switchToStartScreen(); // Call the function to switch to start screen
+            widget
+                .switchToStartScreen(); // Call the function to switch to start screen
           },
         );
       },
@@ -136,6 +137,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
     pauseTimer(); // Pause the timer when the modal opens
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return PauseDialog(onResume: resumeTimer); // Pass the resume function
       },
@@ -294,7 +296,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 onPressed: _showPauseDialog, // Show the pause dialog
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
-                  foregroundColor: Colors.black,
+                  foregroundColor: Colors.white,
                   shape: const CircleBorder(),
                   fixedSize: const Size(60, 60), // Button size
                   padding: EdgeInsets.zero, // Ensures no extra padding
@@ -302,7 +304,7 @@ class _PracticeScreenState extends State<PracticeScreen> {
                 child: const Center(
                   child: Icon(
                     Icons.pause,
-                    size: 40, // Icon size
+                    size: 30, // Icon size
                   ),
                 ),
               ),
